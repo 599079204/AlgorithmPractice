@@ -3,38 +3,91 @@ package linkedlist;
 import base.ListNode;
 import base.Provider;
 
+import java.util.Stack;
+
 /**
  * 单链表常见问题练习
  */
 public class ListDemo1 {
 
     public static void main(String[] args) {
-        ListNode head = Provider.listNodes(15, 10, 100);
+        ListNode head = Provider.listNodes(10, 10, 100);
         System.out.println(print(head));
+        System.out.println(print(reversalPart(head, 5, 9)));
     }
 
     /**
      * 反转链表, 遍历法
      */
     private static ListNode reversal(ListNode head) {
-        // TODO 代码区
-        return null;
+        if (head == null) return null;
+        ListNode pre = null, curr = head, next;
+        while (curr != null) {
+            next = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = next;
+        }
+        return pre;
     }
 
     /**
      * 反转链表, 递归法
      */
     private static ListNode reversalRecursion(ListNode head) {
-        // TODO 代码区
-        return null;
+        if (head == null) return null;
+        return reversalRecursionImpl(null, head);
+    }
+
+    /**
+     * 反转链表的递归实现
+     */
+    private static ListNode reversalRecursionImpl(ListNode pre, ListNode curr) {
+        if (curr.next == null) {
+            curr.next = pre;
+            return curr;
+        }
+        ListNode result = reversalRecursionImpl(curr, curr.next);
+        curr.next = pre;
+        return result;
     }
 
     /**
      * 反转部分链表, 遍历法
      */
     private static ListNode reversalPart(ListNode head, int start, int end) {
-        // TODO 代码区
-        return null;
+        if (head == null) return null;
+        if (start < 0 || end <= start) return head;
+        // 1.校验下标是否正确, 若正确则创建需要节点
+        ListNode startPre = null, startNode = null, endNode = null, endNext = null;
+        ListNode curr = head;
+        int index = 0;
+        while (index <= end) {
+            if (curr == null) return null;
+            if (index == start - 1) startPre = curr;
+            if (index == start) startNode = curr;
+            if (index == end) {
+                endNode = curr;
+                endNext = endNode.next;
+            }
+            curr = curr.next;
+            index++;
+        }
+        // 2.反转指定范围内链表
+        ListNode pre = null, next;
+        curr = startNode;
+        boolean isOver = false;
+        while (!isOver) {
+            if (curr == endNode) isOver = true;
+            next = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = next;
+        }
+        // 3.接上反转后的链表
+        if (startNode != null) startNode.next = endNext;
+        if (startPre != null) startPre.next = pre;
+        return start == 0 ? pre : head;
     }
 
     /**
@@ -132,5 +185,22 @@ public class ListDemo1 {
             curr = curr.next;
         }
         return sb.toString();
+    }
+
+    /**
+     * 检测链表是否翻转成功
+     */
+    private static boolean isReversalSuccess(ListNode ori, ListNode target) {
+        Stack<Integer> stack = new Stack<>();
+        while (target != null) {
+            stack.push(target.val);
+            target = target.next;
+        }
+        while (ori != null) {
+            if (stack.isEmpty()) return false;
+            if (ori.val != stack.pop()) return false;
+            ori = ori.next;
+        }
+        return stack.isEmpty();
     }
 }

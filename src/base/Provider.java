@@ -50,6 +50,20 @@ public class Provider {
     }
 
     /**
+     * 拷贝单链表的. 单纯拷贝值, 节点对象不一样
+     */
+    public static ListNode copyList(ListNode ori) {
+        if (ori == null) return null;
+        ListNode copy = new ListNode(ori.val), curr = copy;
+        while (ori.next != null) {
+            curr.next = new ListNode(ori.next.val);
+            ori = ori.next;
+            curr = curr.next;
+        }
+        return copy;
+    }
+
+    /**
      * 生成指定长度的链表, 数值线性增长
      */
     public static ListNode sequenceNodes(int size) {
