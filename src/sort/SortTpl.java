@@ -132,6 +132,7 @@ public class SortTpl {
     private static void generate(int size, int min, int max) {
         oriData = Provider.intArray(size, min, max);
         sortData = Arrays.copyOf(oriData, oriData.length);
+        Arrays.sort(sortData);
     }
 
     /**
