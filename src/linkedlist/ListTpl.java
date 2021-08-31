@@ -88,7 +88,7 @@ public class ListTpl {
     /**
      * 求出链表的入环节点, 没有环则返回null
      */
-    private static ListNode calcRingNode(ListNode head) {
+    private static ListNode calcRingEnterNode(ListNode head) {
         // TODO 代码区
         return null;
     }
@@ -96,7 +96,7 @@ public class ListTpl {
     /**
      * 计算出两个无环链表的相交节点
      */
-    private static ListNode calcNoRingNode(ListNode head1, ListNode head2) {
+    private static ListNode calcNoRingMeetNode(ListNode head1, ListNode head2) {
         // TODO 代码区
         return null;
     }
@@ -104,7 +104,7 @@ public class ListTpl {
     /**
      * 计算出两个有环链表的相交节点
      */
-    private static ListNode calcRingNode(ListNode head1, ListNode head2) {
+    private static ListNode calcRingMeetNode(ListNode head1, ListNode head2) {
         // TODO 代码区
         return null;
     }
