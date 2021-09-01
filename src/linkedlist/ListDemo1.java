@@ -11,13 +11,9 @@ import java.util.Stack;
 public class ListDemo1 {
 
     public static void main(String[] args) {
-//        ListNode head = Provider.listNodes(8, 4, 100);
-//        ListNode head2 = Provider.ringNodes(8, 4);
-//        ListNode ring1 = calcRingEnterNode(head);
-//        ListNode ring2 = calcRingEnterNode(head2);
-//        System.out.println("入环节点: " + (ring1 == null ? "null" : ring1.val) + ", " + (ring2 == null ? "null" : ring2.val));
-
-        testCalcRingEnterNode();
+        ListNode head = Provider.listNodes(18, 5, 7);
+        System.out.println(print(head));
+        System.out.println(print(removeValueNode(head, 6)));
     }
 
     /**
@@ -204,14 +200,16 @@ public class ListDemo1 {
      * 给定两个可能无环, 可能有环的单链表h1, h2. 如果两个链表相交则返回相交的第一个节点, 否则返回null
      */
     private static ListNode firstNode(ListNode head1, ListNode head2) {
-        // TODO 代码区
-        return null;
+        boolean hasRing1 = calcRingMeetNode(head1) != null;
+        boolean hasRing2 = calcRingMeetNode(head2) != null;
+        if (hasRing1 != hasRing2) return null;
+        return hasRing1 ? calcRingMeetNode(head1, head2) : calcNoRingMeetNode(head1, head2);
     }
 
     /**
      * 求出链表的入环节点, 没有环则返回null
      */
-    private static ListNode calcRingEnterNode(ListNode head) {
+    private static ListNode calcRingMeetNode(ListNode head) {
         if (head == null || head.next == null || head.next.next == null) return null;
         // 1.通过快慢指针追赶方式确定是否为有环链表
         boolean hasRing = false;
@@ -313,8 +311,7 @@ public class ListDemo1 {
         for (int i = 0; i < meetIndex; i++) {
             list2 = list2.next;
         }
-        System.out.println("有环链表的相交节点 (情况一) : " + calcRingEnterNode(list1, list2).val);
-
+        System.out.println("有环链表的相交节点 (情况一) : " + calcRingMeetNode(list1, list2).val);
         // 情况二: 两个有环链表的相交节点在环上
         // 情况三: 两个有环链表的无相交节点
     }
@@ -322,10 +319,10 @@ public class ListDemo1 {
     /**
      * 计算出两个有环链表的相交节点
      */
-    private static ListNode calcRingEnterNode(ListNode head1, ListNode head2) {
+    private static ListNode calcRingMeetNode(ListNode head1, ListNode head2) {
         // 1.分别找出两个有环链表的入口节点
-        ListNode ringEnter1 = calcRingEnterNode(head1);
-        ListNode ringEnter2 = calcRingEnterNode(head2);
+        ListNode ringEnter1 = calcRingMeetNode(head1);
+        ListNode ringEnter2 = calcRingMeetNode(head2);
         // 2.入口节点不一样, 随意返回一个入口节点即可
         if (ringEnter1 != ringEnter2) return ringEnter1;
         // 3.入口节点一样, 将问题转化为求两个无环链表的相交节点
@@ -336,8 +333,20 @@ public class ListDemo1 {
      * 删除链表上, 所有值为 'value' 的节点
      */
     private static ListNode removeValueNode(ListNode head, int value) {
-        // TODO 代码区
-        return null;
+        while (head != null && head.val == value) {
+            head = head.next;
+        }
+        if (head == null) return null;
+        ListNode pre = head, curr = head.next;
+        while (curr != null) {
+            if (curr.val == value) {
+                pre.next = curr.next;
+            } else {
+                pre = curr;
+            }
+            curr = curr.next;
+        }
+        return head;
     }
 
     /**
