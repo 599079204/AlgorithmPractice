@@ -11,9 +11,9 @@ import java.util.Stack;
 public class ListDemo1 {
 
     public static void main(String[] args) {
-        ListNode head = Provider.listNodes(18, 5, 7);
+        ListNode head = Provider.listNodes(3, 1, 99);
         System.out.println(print(head));
-        System.out.println(print(removeValueNode(head, 6)));
+        System.out.println(print(swap2(head)));
     }
 
     /**
@@ -347,6 +347,66 @@ public class ListDemo1 {
             curr = curr.next;
         }
         return head;
+    }
+
+    /**
+     * 链表两两交换
+     */
+    private static ListNode swap2(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode result = head.next;
+        ListNode swap1 = head, swap2 = head.next, pre = null, next;
+        while (true) {
+            next = swap2.next;
+            // 1.交换 swap1, swap2
+            swap2.next = swap1;
+            swap1.next = next;
+            if (pre != null) pre.next = swap2;
+            // 2.向后移动
+            if (next != null && next.next != null) {
+                pre = swap1;
+                swap1 = next;
+                swap2 = next.next;
+            } else break;
+        }
+        return result;
+    }
+
+    private static ListNode swapK(ListNode head, int k) {
+        if (head == null || head.next == null || k <= 1) return head;
+        // 1.设置初始待交换的头尾节点, 如果有null则返回
+        ListNode start = head, end = findKNode(head, k);
+        if (end == null) return head;
+        ListNode result = end, pre = null, next;
+        while (true) {
+            // 2.翻转头尾区域内的链表节点, 并将其与pre相连
+            next = end.next;
+            swapKImpl(start, end);
+            if (pre != null) pre.next = end;
+            start.next = next;
+            if (next == null) break;
+            // 3.设置新的头尾节点, 如果尾节点是null则返回
+            pre = start;
+            start = next;
+            end = findKNode(start, k);
+            if (end == null) break;
+        }
+        return result == null ? head : result;
+    }
+
+    private static void swapKImpl(ListNode start, ListNode end) {
+        ListNode result = end;
+        // 找到中点
+    }
+
+    private static ListNode findKNode(ListNode start, int k) {
+        if (start == null) return null;
+        ListNode curr = start;
+        for (int i = 1; i < k; i++) {
+            if (curr == null) return null;
+            else curr = curr.next;
+        }
+        return curr;
     }
 
     /**

@@ -1,5 +1,6 @@
 package heap;
 
+import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Random;
 
@@ -35,6 +36,23 @@ public class MyHeapDemo1 {
         PriorityQueue<Integer> sBigHeap = systemHeap1();
         PriorityQueue<Integer> sLessHeap = systemHeap2();
         // TODO 测试代码区
+
+        for (int i : array) {
+            bigHeap.push1(i);
+            sBigHeap.add(i);
+        }
+        System.out.println("原数据: " + Arrays.toString(array));
+        System.out.println("自己的大根堆: " + Arrays.toString(bigHeap.data));
+        System.out.println("系统的大根堆: " + Arrays.toString(sBigHeap.toArray()));
+
+        StringBuilder sb1 = new StringBuilder();
+        sb1.append("自己的大根堆 pop: ");
+        while (!bigHeap.isEmpty()) sb1.append(bigHeap.pop1()).append(", ");
+        StringBuilder sb2 = new StringBuilder();
+        sb2.append("系统的大根堆 pop: ");
+        while (!sBigHeap.isEmpty()) sb2.append(sBigHeap.poll()).append(", ");
+        System.out.println(sb1);
+        System.out.println(sb2);
     }
 
     // **************************************************** 大根堆 ****************************************************
@@ -43,29 +61,48 @@ public class MyHeapDemo1 {
      * 添加元素
      */
     public void push1(int value) {
-        // TODO 代码区
+        if (size >= limit) throw new RuntimeException("heap is full!");
+        data[size] = value;
+        heapInsert1(size++);
     }
 
     /**
      * 弹出元素
      */
     public int pop1() {
-        // TODO 代码区
-        return -1;
+        if (size <= 0) throw new RuntimeException("heap is empty!");
+        int popValue = data[0];
+        data[0] = data[--size];
+        heapIfy1(0);
+        return popValue;
     }
 
     /**
      * 指定节点自底向上寻找到合适的位置, 以满足大根堆结构
      */
     private void heapInsert1(int insertIndex) {
-        // TODO 代码区
+        int currIndex = insertIndex, parentIndex = (currIndex - 1) / 2;
+        while (parentIndex >= 0 && data[currIndex] > data[parentIndex]) {
+            swap(data, currIndex, parentIndex);
+            currIndex = parentIndex;
+            parentIndex = (parentIndex - 1) / 2;
+        }
     }
 
     /**
      * 根节点自顶向下寻找到合适的位置, 以满足大根堆结构
      */
     private void heapIfy1(int insertIndex) {
-        // TODO 代码区
+        int currIndex = insertIndex, leftIndex, rightIndex, swapIndex;
+        while (true) {
+            leftIndex = currIndex * 2 + 1;
+            rightIndex = leftIndex + 1;
+            if (leftIndex >= size) break;
+            swapIndex = rightIndex >= size || data[leftIndex] >= data[rightIndex] ? leftIndex : rightIndex;
+            if (data[swapIndex] <= data[currIndex]) break;
+            swap(data, currIndex, swapIndex);
+            currIndex = swapIndex;
+        }
     }
 
     // **************************************************** 小根堆 ****************************************************

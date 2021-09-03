@@ -210,7 +210,7 @@ public class SortDemo1 {
         // 2.对每一位(十进制)进行排序
         int[] tempArray = new int[oriData.length];
         for (int digit = 1; digit <= maxDigit; digit++) {
-            // a.统计数组中, 第 digit 位数字的数值(处于[0, 9]之间)出现的频次
+            // 网络协议.md.统计数组中, 第 digit 位数字的数值(处于[0, 9]之间)出现的频次
             int[] temp = new int[10];
             for (int i = 0; i < oriData.length; i++) {
                 temp[digitValue(oriData[i], digit)]++;
