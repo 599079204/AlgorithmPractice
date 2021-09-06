@@ -12,7 +12,7 @@ import java.util.Stack;
 public class TreeDemo1 {
 
     public static void main(String[] args) {
-        MyTreeNode node = Provider.sequenceTreeNode(6);
+        MyTreeNode node = Provider.sequenceTreeNode(12);
         printTree(node, 1);
         System.out.println();
         backorderTree(node);
@@ -23,16 +23,15 @@ public class TreeDemo1 {
      * 指导思想: 先将头节点入栈, 然后弹出并打印栈节点, 有右节点入栈右节点, 有左节点入栈左节点
      */
     private static void preorderTree(MyTreeNode head) {
-        StringBuilder sb = new StringBuilder();
         Stack<MyTreeNode> stack = new Stack<>();
-        stack.add(head);
+        stack.push(head);
+        MyTreeNode curr;
         while (!stack.isEmpty()) {
-            head = stack.pop();
-            sb.append(head.val).append(", ");
-            if (head.right != null) stack.push(head.right);
-            if (head.left != null) stack.push(head.left);
+            curr = stack.pop();
+            System.out.print(curr.val + ", ");
+            if (curr.right != null) stack.push(curr.right);
+            if (curr.left != null) stack.push(curr.left);
         }
-        System.out.println(sb.toString());
     }
 
     /**
@@ -40,42 +39,42 @@ public class TreeDemo1 {
      * 指导思想: 先让树的左边全部入栈, 然后弹出并打印栈节点, 然后来到弹出节点的右节点
      */
     private static void midOrderTree(MyTreeNode head) {
-        StringBuilder sb = new StringBuilder();
         Stack<MyTreeNode> stack = new Stack<>();
-        while (!stack.isEmpty() || head != null) {
-            if (head != null) {
-                stack.push(head);
-                head = head.left;
+        MyTreeNode curr = head;
+        while (curr != null || !stack.isEmpty()) {
+            if (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
             } else {
-                head = stack.pop();
-                sb.append(head.val).append(", ");
-                head = head.right;
+                curr = stack.pop();
+                System.out.print(curr.val + ", ");
+                curr = curr.right;
             }
         }
-        System.out.println(sb.toString());
     }
 
     /**
      * 后续打印树, 左节点 ==> 右节点 ==> 头节点
-     * 指导思想: 先将头节点入栈,
+     * 指导思想: 循环体内逻辑: 每次都peek栈内节点, 首次递归序时左子节点入栈, 第二次右子节点入栈, 最后弹出节点并打印
      */
     private static void backorderTree(MyTreeNode head) {
-        StringBuilder sb = new StringBuilder();
         Stack<MyTreeNode> stack = new Stack<>();
         stack.push(head);
-        MyTreeNode curr, lastPop = null;
+        MyTreeNode curr, lastPop = head;
         while (!stack.isEmpty()) {
             curr = stack.peek();
             if (curr.left != null && curr.left != lastPop && curr.right != lastPop) {
+                // 第一次递归序: 左子节点入栈
                 stack.push(curr.left);
             } else if (curr.right != null && curr.right != lastPop) {
+                // 第二次递归序: 右子节点入栈
                 stack.push(curr.right);
             } else {
+                // 第三次递归序: 弹栈并打印
                 lastPop = stack.pop();
-                sb.append(lastPop.val).append(", ");
+                System.out.print(lastPop.val + ", ");
             }
         }
-        System.out.println(sb.toString());
     }
 
     /**
