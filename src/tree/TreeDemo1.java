@@ -3,6 +3,7 @@ package tree;
 import base.MyTreeNode;
 import base.Provider;
 
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -13,9 +14,9 @@ public class TreeDemo1 {
 
     public static void main(String[] args) {
         MyTreeNode node = Provider.sequenceTreeNode(12);
-        printTree(node, 1);
+        preorderTree(node);
         System.out.println();
-        backorderTree(node);
+        serialTreePreOrder(node);
     }
 
     /**
@@ -60,17 +61,14 @@ public class TreeDemo1 {
     private static void backorderTree(MyTreeNode head) {
         Stack<MyTreeNode> stack = new Stack<>();
         stack.push(head);
-        MyTreeNode curr, lastPop = head;
+        MyTreeNode lastPop = head, curr;
         while (!stack.isEmpty()) {
             curr = stack.peek();
             if (curr.left != null && curr.left != lastPop && curr.right != lastPop) {
-                // 第一次递归序: 左子节点入栈
                 stack.push(curr.left);
             } else if (curr.right != null && curr.right != lastPop) {
-                // 第二次递归序: 右子节点入栈
                 stack.push(curr.right);
             } else {
-                // 第三次递归序: 弹栈并打印
                 lastPop = stack.pop();
                 System.out.print(lastPop.val + ", ");
             }
@@ -81,22 +79,68 @@ public class TreeDemo1 {
      * 宽度优先遍历打印树
      */
     private static void widthPrint(MyTreeNode head) {
-        // TODO 代码区
+        Queue<MyTreeNode> queue = new LinkedList<>();
+        queue.add(head);
+        MyTreeNode curr;
+        while (!queue.isEmpty()) {
+            curr = queue.poll();
+            System.out.print(curr.val + ", ");
+            if (curr.left != null) queue.add(curr.left);
+            if (curr.right != null) queue.add(curr.right);
+        }
     }
 
     /**
      * 求树的最大宽度
      */
-    private static int treeMaxWidth(MyTreeNode head) {
-        // TODO 代码区
-        return -1;
+    private static void treeMaxWidth(MyTreeNode head) {
+        Queue<MyTreeNode> queue = new LinkedList<>();
+        queue.add(head);
+        MyTreeNode curr, currEnd = head, lastEnd = head;
+        int currIndex = 1, maxCount = 0, currCount = 0;
+        while (!queue.isEmpty()) {
+            curr = queue.poll();
+            currCount++;
+            if (curr.left != null) {
+                lastEnd = curr.left;
+                queue.add(curr.left);
+            }
+            if (curr.right != null) {
+                lastEnd = curr.right;
+                queue.add(curr.right);
+            }
+            if (curr == currEnd) {
+                currEnd = lastEnd;
+                System.out.println("第 " + currIndex + " 层有 " + currCount + " 个节点");
+                maxCount = Math.max(maxCount, currCount);
+                currCount = 0;
+                currIndex++;
+            }
+        }
+        System.out.println("最大宽度 = " + maxCount);
     }
 
     /**
      * 前序序列化树
      */
     private static void serialTreePreOrder(MyTreeNode head) {
-        // TODO 代码区
+        Queue<MyTreeNode> serial = new LinkedList();
+        Stack<MyTreeNode> stack = new Stack<>();
+        stack.push(head);
+        MyTreeNode curr;
+        while (!stack.isEmpty()) {
+            curr = stack.pop();
+            serial.add(curr);
+            if (curr != null) {
+                stack.push(curr.right);
+                stack.push(curr.left);
+            }
+        }
+
+        while (!serial.isEmpty()) {
+            curr = serial.poll();
+            System.out.print((curr != null ? curr.val : "null") + ", ");
+        }
     }
 
     /**

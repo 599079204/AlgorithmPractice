@@ -45,9 +45,8 @@ public class TreeTpl {
     /**
      * 求树的最大宽度
      */
-    private static int treeMaxWidth(MyTreeNode head) {
+    private static void treeMaxWidth(MyTreeNode head) {
         // TODO 代码区
-        return -1;
     }
 
     /**
