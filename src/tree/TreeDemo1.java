@@ -13,9 +13,9 @@ import java.util.Stack;
 public class TreeDemo1 {
 
     public static void main(String[] args) {
-        MyTreeNode node = Provider.sequenceTreeNode(12);
-        preorderTree(node);
-        System.out.println();
+        MyTreeNode node = Provider.sequenceTreeNode(7);
+//        printTree(node, 1);
+//        System.out.println();
         serialTreePreOrder(node);
     }
 
@@ -25,13 +25,12 @@ public class TreeDemo1 {
      */
     private static void preorderTree(MyTreeNode head) {
         Stack<MyTreeNode> stack = new Stack<>();
-        stack.push(head);
-        MyTreeNode curr;
+        stack.add(head);
         while (!stack.isEmpty()) {
-            curr = stack.pop();
-            System.out.print(curr.val + ", ");
-            if (curr.right != null) stack.push(curr.right);
-            if (curr.left != null) stack.push(curr.left);
+            head = stack.pop();
+            System.out.print(head.val + ", ");
+            if (head.right != null) stack.push(head.right);
+            if (head.left != null) stack.push(head.left);
         }
     }
 
@@ -41,15 +40,14 @@ public class TreeDemo1 {
      */
     private static void midOrderTree(MyTreeNode head) {
         Stack<MyTreeNode> stack = new Stack<>();
-        MyTreeNode curr = head;
-        while (curr != null || !stack.isEmpty()) {
-            if (curr != null) {
-                stack.push(curr);
-                curr = curr.left;
+        while (head != null || !stack.isEmpty()) {
+            if (head != null) {
+                stack.push(head);
+                head = head.left;
             } else {
-                curr = stack.pop();
-                System.out.print(curr.val + ", ");
-                curr = curr.right;
+                head = stack.pop();
+                System.out.print(head.val + ", ");
+                head = head.right;
             }
         }
     }
@@ -61,14 +59,21 @@ public class TreeDemo1 {
     private static void backorderTree(MyTreeNode head) {
         Stack<MyTreeNode> stack = new Stack<>();
         stack.push(head);
-        MyTreeNode lastPop = head, curr;
+        MyTreeNode curr, lastPop = head;
         while (!stack.isEmpty()) {
             curr = stack.peek();
+            // 根据递归序判断是第几次来到当前节点, 进而执行不同逻辑
+            // 特殊处理的几种情况:
+            // 1.当前节点的左子节点为null, 可以当做其不是第1次递归序, 因为左子节点为null时, 不用执行任何逻辑
+            // 2.当前节点的右子节点为null, 可以当做其不是第2次递归序, 因为右子节点为null时, 不用执行任何逻辑
             if (curr.left != null && curr.left != lastPop && curr.right != lastPop) {
+                // 第一次来到curr: 让其左子节点入栈
                 stack.push(curr.left);
             } else if (curr.right != null && curr.right != lastPop) {
+                // 第二次来到curr: 让其右子节点入栈
                 stack.push(curr.right);
             } else {
+                // 第三次来到curr: 表示curr的左右节点均处理完成, 弹出打印即可
                 lastPop = stack.pop();
                 System.out.print(lastPop.val + ", ");
             }
@@ -81,12 +86,11 @@ public class TreeDemo1 {
     private static void widthPrint(MyTreeNode head) {
         Queue<MyTreeNode> queue = new LinkedList<>();
         queue.add(head);
-        MyTreeNode curr;
         while (!queue.isEmpty()) {
-            curr = queue.poll();
-            System.out.print(curr.val + ", ");
-            if (curr.left != null) queue.add(curr.left);
-            if (curr.right != null) queue.add(curr.right);
+            head = queue.poll();
+            System.out.print(head.val + ", ");
+            if (head.left != null) queue.add(head.left);
+            if (head.right != null) queue.add(head.right);
         }
     }
 
@@ -96,59 +100,69 @@ public class TreeDemo1 {
     private static void treeMaxWidth(MyTreeNode head) {
         Queue<MyTreeNode> queue = new LinkedList<>();
         queue.add(head);
-        MyTreeNode curr, currEnd = head, lastEnd = head;
-        int currIndex = 1, maxCount = 0, currCount = 0;
+        MyTreeNode currEnd = head, nextEnd = null, curr;
+        int maxWidth = 0, currWidth = 0;
         while (!queue.isEmpty()) {
             curr = queue.poll();
-            currCount++;
+            currWidth++;
             if (curr.left != null) {
-                lastEnd = curr.left;
                 queue.add(curr.left);
+                nextEnd = curr.left;
             }
             if (curr.right != null) {
-                lastEnd = curr.right;
                 queue.add(curr.right);
+                nextEnd = curr.right;
             }
             if (curr == currEnd) {
-                currEnd = lastEnd;
-                System.out.println("第 " + currIndex + " 层有 " + currCount + " 个节点");
-                maxCount = Math.max(maxCount, currCount);
-                currCount = 0;
-                currIndex++;
+                maxWidth = Math.max(maxWidth, currWidth);
+                currEnd = nextEnd;
+                currWidth = 0;
             }
         }
-        System.out.println("最大宽度 = " + maxCount);
+        System.out.println("最大宽度 = " + maxWidth);
     }
 
     /**
      * 前序序列化树
      */
-    private static void serialTreePreOrder(MyTreeNode head) {
-        Queue<MyTreeNode> serial = new LinkedList();
+
+    private static void test(Queue<Integer> queue, MyTreeNode head) {
+
+    }
+
+    private static Queue<Integer> serialTreePreOrder(MyTreeNode head) {
+        // 递归法实现
+
+
+        /*// 非递归法实现
+        Queue<Integer> serial = new LinkedList<>();
         Stack<MyTreeNode> stack = new Stack<>();
         stack.push(head);
-        MyTreeNode curr;
         while (!stack.isEmpty()) {
-            curr = stack.pop();
-            serial.add(curr);
-            if (curr != null) {
-                stack.push(curr.right);
-                stack.push(curr.left);
+            head = stack.pop();
+            serial.add(head != null ? head.val : null);
+            if (head != null) {
+                stack.push(head.right);
+                stack.push(head.left);
             }
         }
-
         while (!serial.isEmpty()) {
-            curr = serial.poll();
-            System.out.print((curr != null ? curr.val : "null") + ", ");
+            Integer value = serial.poll();
+            System.out.print((value != null ? value : "null") + ", ");
         }
+        return serial;*/
     }
 
     /**
      * 反序列化前序树
      */
-    private static MyTreeNode deSerialTreePreOrder(Queue serial) {
-        // TODO 代码区
-        return null;
+    private static MyTreeNode deSerialTreePreOrder(Queue<Integer> serial) {
+        Integer value = serial.poll();
+        if (value == null) return null;
+        MyTreeNode node = new MyTreeNode(value);
+        node.left = deSerialTreePreOrder(serial);
+        node.right = deSerialTreePreOrder(serial);
+        return node;
     }
 
     /**
