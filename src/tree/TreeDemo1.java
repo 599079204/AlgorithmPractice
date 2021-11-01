@@ -133,7 +133,6 @@ public class TreeDemo1 {
     private static Queue<Integer> serialTreePreOrder(MyTreeNode head) {
         // 递归法实现
 
-
         // 非递归法实现
         Queue<Integer> serial = new LinkedList<>();
         Stack<MyTreeNode> stack = new Stack<>();
@@ -151,16 +150,6 @@ public class TreeDemo1 {
             System.out.print((value != null ? value : "null") + ", ");
         }
         return serial;
-        // 不可寄托的技能：
-        // 修罗23，真吾之体23，天人之体23，逆转轮回秘，九幽炼神，
-
-        // 水太和：乘风，同风，奔流，罡煞合流3
-        // 七杀金：杀意3，御剑术3，极剑12，我剑2，神御剑，剑心通明，刺字诀，点字诀，化字诀，击字诀，崩字诀，御字诀，
-        // 玉清：回光诀，玉京飞流，五气归源，万法归藏4，谷神大法，元始之胎，各种元神
-        // 偷天：血骨炼形，浊之躯，护体血罡，
-        // 金北斗：天X剑意，天X诀（不要天权），北斗绝式12
-        // 葵花：太阴X，少阴X，玄阴X，神行，瞬形，九州，辟邪，幽剑，太虚元，太虚神，瞬霎，渊狱诀，幽狱诀，一剑，虚空谒神，坤元4，厚德
-        // 符：云气汇流，结云经，天真论
     }
 
     /**
